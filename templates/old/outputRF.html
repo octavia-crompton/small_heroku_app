@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Recalls</title>
+  <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+</head>
+
+<body>
+  
+<h1> Random forest output </h1>
+
+<img src="/static/infl.png">
+
+<h3>Filename: {{ filename }}</h3>
+
+<h3>Features: </h3>
+  
+<h3>
+{% for key, value in features.iteritems() %}
+   <tr>
+        <li> {{ key }}  = {{ value }} </li>
+   </tr>
+{% endfor %}
+</h3>
+
+
+<h3> No?  <a href = '{{url_for('upload_file')}}'> Try another file </a><h3>  
+
+</body>
+
+</html>

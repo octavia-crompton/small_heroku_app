@@ -1,0 +1,60 @@
+{
+  "veg_params": {
+    "min_samples_split": "10", 
+    "max_depth": "20"
+  }, 
+  "bare_params": {
+    "min_samples_split": "10", 
+    "max_depth": "20"
+  }, 
+  "ravel_params": {
+    "trim": [
+      0, 
+      0, 
+      0
+    ], 
+    "weight": 5, 
+    "gsigma": [
+      2
+    ], 
+    "saturate": 100, 
+    "edge": 1, 
+    "ptrn_keys": [
+      "d2wB", 
+      "bareLv", 
+      "d2yV_s2", 
+      "d2uB", 
+      "d2V", 
+      "patchLv_s2", 
+      "d2dV_s2", 
+      "d2wV", 
+      "d2B", 
+      "d2uV", 
+      "d2xB", 
+      "isvegc", 
+      "patchLv", 
+      "d2rV", 
+      "bareL_s2", 
+      "d2xV_s2", 
+      "patchLb", 
+      "d2xV", 
+      "upslope3", 
+      "d2rB", 
+      "d2xB_s2", 
+      "d2yB_s2", 
+      "patchLb_s2", 
+      "d2uB_s2", 
+      "d2lB", 
+      "d2dV", 
+      "upslope10", 
+      "d2yB", 
+      "d2lV", 
+      "bareLv_s2", 
+      "d2uV_s2", 
+      "d2dB_s2", 
+      "bareL", 
+      "d2yV", 
+      "d2dB"
+    ]
+  }
+}

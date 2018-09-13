@@ -1,0 +1,196 @@
+
+  <!-- Add icon library -->
+
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Add font awesome icons to buttons  -->
+
+  <div class="container">
+    
+    <p>
+     This is a tool to assess plant water availability and erosion risk using storm-scale simulations.    
+    </p>
+    <p><a href="https://www.npr.org/?refresh=true" class="btn btn-primary btn-large">Learn more »</a></p>    
+    
+  </div>
+    
+    
+  <div class="container"> <!-- If Needed Left and Right Padding in 'md' and 'lg' screen means use container class -->
+    <div class="row">
+      <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+        <h4  class="text-success">  Upload vegetation map </h4>
+
+        <form action="" method="POST"  enctype="multipart/form-data">        
+            {{ vegform.hidden_tag() }}                
+            <p>                              
+            {% if features.filename %}
+           <strong> veg file selected </strong> :<em>  {{features.filename}} {{vegform.delete()}} </em><br> 
+           </p>                 
+            <p> 
+            {% else %}
+            {{vegform.veg }}
+            {{ vegform.submit() }}
+            {% endif %}
+          </p> 
+      
+        </form> 
+    
+        <form action="" method="POST"  enctype="multipart/form-data">                             
+                {{ imageform.hidden_tag() }}                              
+    
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        
+                {% if result_im != None %}
+                <h4 class="text-success">Uploaded image </h4>                
+                
+                <img src="data:image/png;base64,{{ result_im }}" width="300">
+                 <br>                                        
+
+                {% endif %}
+
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                  
+                {% if result_bin != None %}  
+                  
+                  <h4 class="text-success"> Binary image 
+                  
+                  
+                  <button type="submit" class="btn"  name="submit" value="rotate-left"> 
+                     <i class="fa fa-rotate-left" > </i>
+                   </button>
+
+                  <button type="submit" class="btn"  name="submit" value="rotate-right"> 
+                     <i class="fa fa-rotate-right" > </i> 
+                   </button>
+                  
+
+                  </h4>
+                  {% if features.rotate == 0 %}
+                   <img src="data:image/png;base64,{{ result_bin }}" width="250">
+                  {% elif features.rotate == 180 %}
+                  <img src="data:image/png;base64,{{ result_bin }}" width="250">
+                  {% else %}
+                   <img src="data:image/png;base64,{{ result_bin }}" height="250">
+                  {% endif %}
+                  
+                  <br>
+                  
+                   Adjust threshold:
+                    {{ imageform.threshold(size=8) }}
+                  <br>
+                   Adjust pixel size:
+                    {{ imageform.grid(size=8 )}}m
+                    {{ imageform.submit() }}
+
+                  {% endif %}                          
+                 
+               </div>
+            </div>                   
+              
+           </form> 
+            
+
+   </div>
+    <div class="row">   
+      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        
+          <h4 class="text-success"> Input storm and landscape features</h4>          
+                
+          <p class="text-success"> Select a typical storm duration and update to view available storm intensities:  </p> 
+          
+          <form action="" method="POST"  enctype="multipart/form-data">                             
+            {{ stormform.hidden_tag() }}                              
+            {{ stormform.tr.label }} : {{ stormform.tr() }} hr           
+          <p >  {{ stormform.submit() }} </p>   
+          </form>          
+          <form action="" method="POST"  enctype="multipart/form-data">                             
+              {{ form.hidden_tag() }}    
+              {% if form.p.choices  %}                
+              {{ form.p.label }} :  {{ form.p()}} cm/hr   
+              {% else %}   
+                {{ form.p(disabled=True) }}
+                {{ form.title }}
+              {% endif %} 
+            <br>  
+            {{ form.KsV.label }} :  {{ form.KsV()}} cm/hr
+            <br> 
+            {{ form.slope.label }} :  {{ form.slope() }} % 
+            <br> 
+            
+            <p > Update before running the random forest model:</p>   
+           {{ form.update() }}
+                
+
+      <p><a class="btn" href="https://www.npr.org/?refresh=true"> some link to details »</a></p>
+                         
+    </div>
+  </div>    
+
+  <div class="container">
+     <h4 class="text-success">  Feature summary   </h4>            
+      <p > 
+        {% if features.tr %}    
+          tr = {{features.tr}} hr 
+        {% else %}  
+         <br>
+        {% endif %}           
+        {% if features.p %}  
+          ; p = {{features.p}} cm/hr 
+        {% endif %}
+      </p>  
+      <p > 
+        {% if features.KsV %}    
+          Ksat = {{features.KsV}} cm/hr 
+        {% endif %}           
+        {% if features.slope %}  
+          ; slope  = {{features.slope}} 
+        {% else %}  
+         <br>
+        {% endif %}
+      </p>                                  
+            
+  <h4 class="text-success">  {{ form.submit() }} or {{ form.reset()}} </h4>            
+  
+  </form> 
+   </div>
+
+   <div class="container">
+      
+
+    {% if result_RF != None %}  
+        
+        <h3 class="text-success"> RF output </h3>
+        {% if features.rotate == 0 %}
+         <img src="data:image/png;base64,{{ result_RF }}" height="250">
+        {% elif features.rotate == 180 %}
+        <img src="data:image/png;base64,{{ result_RF }}" height="250">
+        {% else %}
+         <img src="data:image/png;base64,{{ result_RF }}" width="250">
+        {% endif %}
+        
+        <br>
+      
+        {% endif %}                          
+                 
+
+
+        <h3 class="text-success">  Model details </h3>
+        <p> The infiltration predictions use a random forest model trained on storm-scale shallow water simulations   </p>
+        <p><a class="btn" href="https://www.npr.org/?refresh=true">View details »</a></p>
+    
+
+    
+  </div>
+    
+  
+
+
+
+
+{% endblock %}

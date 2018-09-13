@@ -1,0 +1,50 @@
+<html>
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="static/bootstrap.min.css" rel="stylesheet" media="screen">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="static/bootstrap.bundle.min.js"></script>
+        <script>
+        function outputUpdate(threshold) {
+          document.querySelector('#selected-threshold').value =  Math.round( threshold * 100) / 100;
+        }
+        function soilUpdate(age) {
+            document.querySelector('#selected-soil').value = soil;
+        }
+        
+        </script>
+
+        <br>
+    
+        <title> RF app </title>    
+        
+        <div class="container">
+         <div class="row">
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">    
+    
+
+        <h1>  Welcome to the Random Forest App! </h1>
+        
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <hp>
+            {% for message in messages %}        
+            <strong> <p class="text-primary " >{{ message}}</p></strong>
+            {% endfor %}
+        </hp>
+        {% endif %}
+        {% endwith %}
+        </div>
+        </div>
+        </div>
+        
+        {% block content %}{% endblock %}
+        
+
+    </body>
+    
+    
+</html>
+
+ 

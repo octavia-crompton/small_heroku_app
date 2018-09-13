@@ -1,0 +1,19 @@
+{
+  "slope": "0.5", 
+  "vmaxmax": 22.0, 
+  "rotate": 90.0, 
+  "Ly": 150, 
+  "fV": 0.45, 
+  "filepath": "uploads/texas.png", 
+  "inflDveg": 8.06, 
+  "tr": "0.5", 
+  "filename": "texas.png", 
+  "p": "10", 
+  "KsV": "2", 
+  "grid": "2", 
+  "threshold": "0.50", 
+  "inflD": 2.55, 
+  "vmax": 11.77, 
+  "Lx": 150, 
+  "rainD": 5.0
+}

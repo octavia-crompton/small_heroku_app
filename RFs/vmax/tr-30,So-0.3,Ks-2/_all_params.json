@@ -1,0 +1,46 @@
+{
+  "batch_dict" :    {      
+    "So" :  [0.3],        
+    "tr" : [30],  
+    "Ks" : [2.0],
+    "p" : [2.5, 5.0, 7.5, 10]    
+    },
+  "sim_dict" : {        
+    "sigma" : [1,2,3,4,5],
+    "fV" : [0.2,0.4,0.6,0.8]
+    },
+  "common_dict" : {      
+            "scheme" : "mann",
+            "imodel" : "richards",
+            "vegtype" : "randv",     
+            "topo" : "plane",                 
+            "soil" : "Lev",                                                        
+            "ncol" : 50, 
+            "nrow" : 100,
+            "dx" : 1.0,             
+            "epsh" : 2e-4,            
+            "tmax_scale" : 4,                                                    
+            "itype1" : 0,
+            "itype3" : 1,
+            "itype2" : 1,
+            "itype4" : 1,
+            "drainBC" : "free",                         
+            "stop_tol"  : 1e-2,             
+            "dz" : 1.0,
+            "zseal" : 2.0,
+            "s_scale" : 10,    
+            "dt_p" : 60,            
+            "dt_r" : 2.0, 
+            "zmax" : 40,                            
+            "iBC" : 1,                                                                
+            "dt_sw" : 0.0005,
+            "match_flagV" : 0,
+            "match_flagB" : 0                
+         },
+   "alpha_dict" : {   
+        "mann"   :   0.1,
+        "mix" : 0.016,
+        "darcy"  : 0.256,
+        "cyl"    : 3.146
+           }
+}

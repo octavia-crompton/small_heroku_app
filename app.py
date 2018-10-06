@@ -29,14 +29,19 @@ def allowed_file(filename):
 
 
 @app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
-    
+@app.route('/index', methods=['GET', 'POST']) 
+
 def index():  
+  """
+  App homepage (and only page)
     
+  """
   vegform = Upload()  
   imageform = ImageUpdate()    
   stormform = Storm()   
   form = Landscape() 
+  
+  # Set image defaults to zero so template knows what's going on
   result_im = None
   result_bin = None  
   result_RF = None
@@ -67,11 +72,9 @@ def index():
   if 'tr' in features.keys():
       form.p.choices = [(str(p),str(p)) for p in p_choices[features['tr']]]   
   
-  # if "tr" not in features:
-      # form.p(disabled=True)
-  
   if vegform.validate_on_submit():
- 
+     
+     ##  
      if vegform.delete.data == True:
        flash('File deleted ')
        
@@ -135,11 +138,13 @@ def index():
      flash('Landscape featuress added')
      
      keys = [key for key in request.form.keys() if key not in ['csrf_token', 'ascii']]
-
+     
+     if 'tr' not in features.keys():
+         features['tr'] = '0.5'
+             
      features['slope'] = request.form['slope']
      features['p'] = (request.form['p'])
      features['KsV'] = (request.form['KsV'])     
-     
      features['rainD']  = float(features['tr'])*float(features['p'])
    
   if 'filepath' in features.keys():
@@ -156,19 +161,20 @@ def index():
      flash('Running the random forest model!')
      
      keys = [key for key in request.form.keys() if key not in ['csrf_token', 'ascii']]
-
+     
+     if 'tr' not in features.keys():
+         features['tr'] = '0.5'
+         
      features['slope'] = request.form['slope']
      features['p'] = (request.form['p'])
      features['KsV'] = (request.form['KsV'])     
-     
      features['rainD']  = float(features['tr'])*float(features['p'])
-     
      
      result_RF, zinflc = run_RF(features['filepath'], features = features, target_col = 'zinflc')
      result_vmax, vmax = run_RF(features['filepath'], features = features, target_col = 'vmax')     
      
      features['inflDveg'] = np.round(np.mean(zinflc[bw == 1]),2)
-     features['inflD'] = np.round(np.mean(zinflc[bw == 0]),2)
+     features['inflD'] = np.round(np.mean(zinflc),2)
      features['vmax'] = np.round(np.mean(vmax),2)
      features['vmaxmax'] = np.round(np.percentile(vmax, 95),2)     
 
@@ -189,10 +195,10 @@ def index():
         
   stormform.process()  
     
-  for key in [ 'p', 'slope', 'Ksat']:
+  for key in [ 'p', 'slope', 'KsV']:
     if key in features.keys():
         form[key].default = features[key]
-        
+
   form.process()
   
   return render_template('home.html', form = form, \

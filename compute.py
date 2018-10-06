@@ -1,5 +1,3 @@
-from numpy import exp, cos, linspace
-
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -13,10 +11,6 @@ import imageio
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 
-def damped_vibrations(t, A, b, w):
-    return A*exp(-b*t)*cos(w*t)
-
-
 def png_plot(filepath, resolution=200):
     """Return filename of plot of the damped_vibration function."""
   
@@ -27,7 +21,7 @@ def png_plot(filepath, resolution=200):
     #image = misc.face(gray=True)
     image = imageio.imread(filepath)
     image = color.rgb2gray(image)
-    
+    image = np.fliplr(image.T)
     im = ax.pcolormesh(image.T, cmap = 'Greens')
     divider = make_axes_locatable(ax)
     cax = divider.append_axes("right", size="5%", pad=0.05)
@@ -55,17 +49,18 @@ def binarize(filepath, features):
     
     image = imageio.imread(filepath)
     image = color.rgb2gray(image)
-    
+    image = np.fliplr(image.T)
+        
     if scale != 1:
         image = regrid(image, scale)
         
     bw = 1.0*(image > float(threshold))
     
-    if rotate == 270:
-            bw =np.flipud(bw).T           
+    if rotate == 90:
+            bw =np.fliplr(bw).T           
     elif rotate == 180:
-            bw = np.flipud(bw)           
-    elif rotate == 90:
+            bw = np.fliplr(bw)           
+    elif rotate == 270:
             bw =bw.T
         
     fig= plt.figure()
@@ -98,9 +93,15 @@ def regrid(im, scale):
      yv = np.arange(0, im.shape[1], scale)
 
      xv, yv = np.meshgrid(xv,yv)
+     
+    
+     # xv = xv.T
+     # yv = yv.T
+     
      im2 = interpolating_function((xv, yv)).T   
         
      return im2
+     
      
 def run_RF(filepath, features, target_col = 'zinflc'):
     
@@ -115,12 +116,11 @@ def run_RF(filepath, features, target_col = 'zinflc'):
     searchdir = '/'.join(['RFs', target_col, RF_str ])
 
     if os.path.isdir(searchdir):
-        print searchdir
-        print 'this is a dir'
+        print searchdir, 'success'
         RF_dir = searchdir
-    else:
-        RF_dir = 'RFs/{0}/tr-30,So-0.3,Ks-2'.format(target_col)
-    
+    else:        
+        RF_dir = 'RFs/{0}/tr-30,So-0.1,Ks-2.5'.format(target_col)
+        print RF_dir, 'default'
     
     figdata_png, bw = binarize(filepath, features)
     
@@ -159,14 +159,14 @@ def wrap_RF(RF_dir, isvegc, features ):
     import sys
     import pandas as pd
     
-    sys.path.append('model')
+    sys.path.append('model_app')
 
-    mymods = [ 'apply_RF', 'ravel_fxns_RF']
+    mymods = [ 'apply_RF_app', 'ravel_fxns_app']
     for mymod in mymods:
         if mymod in sys.modules: 
             del sys.modules[mymod]
             
-    from apply_RF import load_RF, unite_veg_bare  # located in model folder
+    from apply_RF_app import load_RF, unite_veg_bare 
 
     
     RF = load_RF(RF_dir)
@@ -178,6 +178,9 @@ def wrap_RF(RF_dir, isvegc, features ):
     xc = np.arange(0, ncol*dx, dx)  + dx/2
     yc = np.arange(0, nrow*dx, dx)  + dx/2
     xc, yc = np.meshgrid(xc, yc)
+    
+    xc = xc.T
+    yc = yc.T
     
     So = float(features['slope'])/100.
     Ks = features['KsV']

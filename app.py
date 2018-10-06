@@ -20,6 +20,7 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['SECRET_KEY'] = 'any secret string'
 
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'dat', 'pklz'])
@@ -215,4 +216,4 @@ def index():
 if __name__ == '__main__':
   app.secret_key = 'super_secret_key'
 
-  app.run(debug=True, use_reloader=True)
+  app.run(debug=False, use_reloader=True)

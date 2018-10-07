@@ -20,14 +20,12 @@ app = Flask(__name__)
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['SECRET_KEY'] = 'any secret string'
 
 
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'dat', 'pklz'])
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST']) 
@@ -47,10 +45,11 @@ def index():
   result_bin = None  
   result_RF = None
   result_vmax = None
-  feature_path = '/'.join([ os.getcwd(), 'features.json'])
 
-
-  if 'features.json' in os.listdir( os.getcwd()):
+  feature_dir = '/'.join([os.getcwd(), 'feature' + request.remote_addr])
+  feature_path = '/'.join([feature_dir, 'features.json'])
+  os.mkdir(feature_dir) if os.path.isdir(feature_dir) == False  else True
+  if 'features.json' in os.listdir(feature_dir):
     with open(feature_path, 'r') as fp:
       features = json.load(fp)
      
@@ -75,7 +74,6 @@ def index():
   
   if vegform.validate_on_submit():
      
-     ##  
      if vegform.delete.data == True:
        flash('File deleted ')
        
@@ -179,7 +177,7 @@ def index():
      features['vmax'] = np.round(np.mean(vmax),2)
      features['vmaxmax'] = np.round(np.percentile(vmax, 95),2)     
 
-  with open(feature_path, 'w') as fp:
+  with open(feature_dir + '/features.json', 'w') as fp:
       json.dump(features, fp, indent = 2)      
 
   keys = [key for key in features.keys() if key not in ['filepath', 'filename', 'tr']]
@@ -216,4 +214,4 @@ def index():
 if __name__ == '__main__':
   app.secret_key = 'super_secret_key'
 
-  app.run(debug=False, use_reloader=True)
+  app.run(debug=False, use_reloader=True, threaded = True)
